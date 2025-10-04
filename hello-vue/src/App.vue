@@ -2,7 +2,7 @@
   <div class="container">
     <h1>Gestor de tareas</h1>
 
-    <!-- Input con v-model -->
+  
     <input 
       v-model="newTask" 
       placeholder="Escribe el nombre de la tarea" 
@@ -12,11 +12,11 @@
 
     <hr />
 
-    <!-- v-if / v-else -->
+  
     <div v-if="tasks.length > 0">
       <h2>Listado de tareas</h2>
 
-      <!-- Tablero estilo Kanban -->
+      
       <div class="board">
         <div class="column">
           <h3>To Do</h3>
