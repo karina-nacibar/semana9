@@ -1,8 +1,7 @@
 <template>
   <div class="container">
-    <h1>Gestor de tareas</h1>
+    <h1>Gestor de Tareas</h1>
 
-  
     <input 
       v-model="newTask" 
       placeholder="Escribe el nombre de la tarea" 
@@ -12,46 +11,37 @@
 
     <hr />
 
-  
-    <div v-if="tasks.length > 0">
-      <h2>Listado de tareas</h2>
-
-      
-      <div class="board">
-        <div class="column">
-          <h3>To Do</h3>
-          <div 
-            v-for="(task, index) in tasks.filter(t => t.status === 'todo')" 
-            :key="index" 
-            class="task blue"
-          >
-            {{ task.name }}
-            <button @click="moveTask(index, 'doing')">➡</button>
-          </div>
+    <div v-if="tasks.length > 0" class="kanban">
+      <div class="column todo">
+        <h2>To do</h2>
+        <div 
+          v-for="(task, index) in tasks.filter(t => t.status === 'todo')" 
+          :key="index" 
+          class="task">
+          {{ task.name }}
+          <button @click="moveTask(task, 'doing')">➡</button>
         </div>
+      </div>
 
-        <div class="column">
-          <h3>Doing</h3>
-          <div 
-            v-for="(task, index) in tasks.filter(t => t.status === 'doing')" 
-            :key="index" 
-            class="task green"
-          >
-            {{ task.name }}
-            <button @click="moveTask(index, 'done')">➡</button>
-          </div>
+      <div class="column doing">
+        <h2>Doing</h2>
+        <div 
+          v-for="(task, index) in tasks.filter(t => t.status === 'doing')" 
+          :key="index" 
+          class="task">
+          {{ task.name }}
+          <button @click="moveTask(task, 'done')">➡</button>
         </div>
+      </div>
 
-        <div class="column">
-          <h3>Done</h3>
-          <div 
-            v-for="(task, index) in tasks.filter(t => t.status === 'done')" 
-            :key="index" 
-            class="task red"
-          >
-            {{ task.name }}
-            <button @click="removeTask(index)">X</button>
-          </div>
+      <div class="column done">
+        <h2>Done</h2>
+        <div 
+          v-for="(task, index) in tasks.filter(t => t.status === 'done')" 
+          :key="index" 
+          class="task">
+          {{ task.name }}
+
         </div>
       </div>
     </div>
@@ -65,11 +55,9 @@
 <script setup>
 import { ref } from 'vue'
 
-// Modelo
 const newTask = ref('')
 const tasks = ref([])
 
-// Lógica
 const addTask = () => {
   const name = newTask.value.trim()
   if (name !== '') {
@@ -78,18 +66,14 @@ const addTask = () => {
   }
 }
 
-const moveTask = (index, newStatus) => {
-  tasks.value[index].status = newStatus
-}
-
-const removeTask = (index) => {
-  tasks.value.splice(index, 1)
+const moveTask = (task, nextStatus) => {
+  task.status = nextStatus
 }
 </script>
 
 <style scoped>
 .container {
-  max-width: 800px;
+  max-width: 900px;
   margin: 40px auto;
   font-family: Arial, sans-serif;
   text-align: center;
@@ -103,33 +87,36 @@ input {
 button {
   margin-left: 8px;
   padding: 6px 10px;
+  border: none;
+  border-radius: 6px;
   cursor: pointer;
 }
 
-.board {
+.kanban {
   display: flex;
   justify-content: space-between;
   margin-top: 20px;
 }
 
 .column {
-  width: 30%;
-  border: 1px dashed #ccc;
+  flex: 1;
+  margin: 0 10px;
   padding: 10px;
-  border-radius: 6px;
+  border-radius: 8px;
+  background: #f4f4f4;
   min-height: 200px;
 }
 
+.todo { background: #e3f2fd; }   
+.doing { background: #e8f5e9; } 
+.done { background: #ffebee; }  
 .task {
-  margin: 6px 0;
-  padding: 6px;
-  border-radius: 4px;
-  color: white;
+  background: white;
+  padding: 8px;
+  margin-bottom: 10px;
+  border-radius: 6px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   display: flex;
   justify-content: space-between;
 }
-
-.blue { background: #3498db; }
-.green { background: #27ae60; }
-.red { background: #e74c3c; }
 </style>
